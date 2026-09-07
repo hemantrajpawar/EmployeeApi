@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "lLYoE3ihq/I=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\web development\\C# and .NET DEVELOPMENT\\new_employee_backend_project\\backend\\backend.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.11\\microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.openapi\\2.7.5\\microsoft.openapi.2.7.5.nupkg.sha512"
+  ],
+  "logs": []
+}
