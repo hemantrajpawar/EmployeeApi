@@ -1,41 +1,53 @@
-var builder = WebApplication.CreateBuilder(args);
+var builder=WebApplication.CreateBuilder(args);
+var app=builder.Build();
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+app.MapGet("/",(HttpContext Context)=>{
+    // await Context.Response.WriteAsJsonAsync("Hello Raj");
+    return "Hello";
+});
 
-var app = builder.Build();
+app.MapGet("/user",(string?name,int? age)=>{
+    return $"I am a new User - {name} & having age {age}";
+});
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.MapGet("/user/id/{id}",(int id)=>{
+    return $"user having id : {id}";
+});
+
+app.MapGet("/user/name/{name}",(string name)=>{
+    return $"user having name : {name}";
+});
+
+app.MapGet("/getuser",()=>{
+    return Results.Ok(UserReg.GetUser());
+});
+
+app.MapPost("/user", (User user) =>
 {
-    app.MapOpenApi();
-}
+    UserReg.AddUser(user);
 
-app.UseHttpsRedirection();
+    return Results.Created($"/user/{user.Id}", user);
+});
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapPost("/user/{id}",(int id ,User user)=>{
+    return $"User having id - {id} address by name -{user.Name} ";
+});
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+class User
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public int Id { get; set; }
+    public string Name { get; set; } = "";
+    public int Age { get; set; }
+}
+
+static class UserReg{
+    public static List<User>user=new List<User>();
+    public static void AddUser(User u){
+        user.Add(u);
+    }
+    public static List<User> GetUser(){
+        return user;
+    }
 }
