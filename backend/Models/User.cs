@@ -18,4 +18,6 @@ public class User
     public string Password { get; set; } = "";
 
     public bool IsAdmin { get; set; }
+
+    public Employee Employee {get;set;}=null!;
 }

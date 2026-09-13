@@ -40,7 +40,7 @@ public class UserController : ControllerBase
     {
         return Ok( await _userService.GetUsers());
     }
-}
+} 
 
 //Model Binding : which helps to know the apicontroller that from where the parameter comes from like from body , from header , from query or from route
 // that's why we use model binders i.e. 

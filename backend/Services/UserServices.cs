@@ -56,7 +56,7 @@ public class UserService : IUserService
     }
 
     public async Task<List<UserResponseDto>> GetUsers(){
-        var temp_user= await _db.Users.ToListAsync();
+        var temp_user= await _db.Users.AsNoTracking().ToListAsync();  // AsNoTracking means "EF Core, just give me the data. I don't intend to modify these entities, so don't track them." as Tracking them is unnecessary overhead.
         return temp_user.Select(u=> new UserResponseDto{
             Id=u.Id,
             Name=u.Name,
