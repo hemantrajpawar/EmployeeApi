@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Backend.Services;
+
 using Backend.DTOs;
 using Backend.Interfaces.Services;
 
@@ -17,29 +17,29 @@ public class UserController : ControllerBase
 
 
     [HttpPost]
-    public IActionResult CreateUser(CreateUserDto dto)
+    public async Task<IActionResult> CreateUser(CreateUserDto dto)
     {
-        var user = _userService.CreateUser(dto);
+        var user = await _userService.CreateUser(dto);
 
         return Created("/api/users", user);
     }
 
-    // [HttpGet("{id}")]
-    // public IActionResult GetUser([FromRoute]int id)
-    // {
-    //     var user = _userService.GetUser(id);
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUser([FromRoute]int id)
+    {
+        var user = await _userService.GetUser(id);
 
-    //     if (user == null)
-    //         return NotFound();
+        if (user == null)
+            return NotFound();
 
-    //     return Ok(user);
-    // }
+        return Ok(user);
+    }
 
-    // [HttpGet]
-    // public IActionResult GetUsers()
-    // {
-    //     return Ok(_userService.GetUsers());
-    // }
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        return Ok( await _userService.GetUsers());
+    }
 }
 
 //Model Binding : which helps to know the apicontroller that from where the parameter comes from like from body , from header , from query or from route

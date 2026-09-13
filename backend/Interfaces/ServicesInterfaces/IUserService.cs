@@ -3,7 +3,9 @@ using Backend.DTOs;
 
 public interface IUserService
 {
-    UserResponseDto CreateUser(CreateUserDto dto);
-    // UserResponseDto? GetUser(int id);
-    // List<UserResponseDto> GetUsers();
+    Task<UserResponseDto> CreateUser(CreateUserDto dto);
+
+    Task<UserResponseDto?> GetUser(int id);
+
+    Task<List<UserResponseDto>> GetUsers();
 }

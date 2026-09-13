@@ -3,6 +3,8 @@ using Backend.DbContext;
 using Backend.DTOs;
 using Backend.Model;
 using Backend.Interfaces.Services;
+using BCrypt.Net;
+using Microsoft.EntityFrameworkCore;
 
 public class UserService : IUserService
 {   
@@ -13,15 +15,19 @@ public class UserService : IUserService
         _db = db;
     }
 
-    public UserResponseDto CreateUser(CreateUserDto dto)
+    public async Task<UserResponseDto> CreateUser(CreateUserDto dto)
     {
         var new_user = new User
         {
             Name = dto.Name,
             Email = dto.Email,
-            Password = dto.Password,
+            Password = BCrypt.HashPassword(dto.Password),
             IsAdmin = false
         };
+
+        _db.Users.Add(new_user);
+
+        await _db.SaveChangesAsync();
 
         var response = new UserResponseDto
         {
@@ -33,25 +39,28 @@ public class UserService : IUserService
         return response;
     }
 
-    // public UserResponseDto? GetUser(int id){
+    public async Task<UserResponseDto?> GetUser(int id){
 
-    //     if(user==null) return null;
+        var user = await _db.Users.FindAsync(id);
 
-    //     var response = new UserResponseDto
-    //     {
-    //         Id = user.Id,
-    //         Name = user.Name,
-    //         Email = user.Email
-    //     };
+        if(user==null) return null;
 
-    //     return response;
-    // }
+        var response = new UserResponseDto
+        {
+            Id = user.Id,
+            Name = user.Name,
+            Email = user.Email
+        };
 
-    // public List<UserResponseDto> GetUsers(){
-    //     return _user.Select(u=> new UserResponseDto{
-    //         Id = u.Id,
-    //         Name = u.Name,
-    //         Email = u.Email
-    //     }).ToList();
-    // }
+        return response;
+    }
+
+    public async Task<List<UserResponseDto>> GetUsers(){
+        var temp_user= await _db.Users.ToListAsync();
+        return temp_user.Select(u=> new UserResponseDto{
+            Id=u.Id,
+            Name=u.Name,
+            Email=u.Email
+        }).ToList();
+    }
 }
